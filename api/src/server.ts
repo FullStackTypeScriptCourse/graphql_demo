@@ -16,15 +16,29 @@ import Book from './resolvers/book';
 import Rating from './resolvers/rating';
 import { books, categories, ratings } from './data';
 import usersRouter from './routes/users';
+import mongoose from 'mongoose';
+import * as dotenv from 'dotenv'
+dotenv.config();
+// console.log('DB: ... :',process.env)
 
 const app = express();
+
+// Connect to MongoDB database
+const DB = process.env.DATABASE_DEV!
+.replace( '<password>', process.env.DATABASE_PASSWORD!,)
+.replace('<username>', process.env.DATABASE_USERNAME!);
+console.log('DB: ... :',DB)
+
+mongoose.connect(DB, {
+}).then(() => console.log('DB connection successful!'));
+
+
 
 interface MyContext {
   books: typeof books;
   categories: typeof categories;
   ratings: typeof ratings;
 }
-
 
 const httpServer = http.createServer(app);
 const server = new ApolloServer<MyContext>({

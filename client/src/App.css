@@ -1,9 +1,13 @@
+body {
+  background-color: rgb(255, 252, 240);
+}
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
   font-family: 'Open Sans', sans-serif;
+  /* background-color: rgb(255, 247, 240); */
 }
 
 .logo {

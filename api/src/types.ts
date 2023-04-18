@@ -24,4 +24,9 @@ type Args = {
     id: string;
     input: Book | Rating;
 };
-export type { Book, Category, Rating, Context, Args };
+type PersonType = {
+    id: string;
+    name: string;
+    age: number;
+};
+export type { Book, Category, Rating, Context, Args, PersonType };

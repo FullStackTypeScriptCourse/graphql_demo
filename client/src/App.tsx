@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 // https://www.apollographql.com/docs/react/get-started
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import SimpleCards from './components/SimpleCards';
 import WithUseQuery from './components/WithUseQuery';
 

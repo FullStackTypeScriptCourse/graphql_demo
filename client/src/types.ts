@@ -13,4 +13,18 @@
     name: string;
     books: Book[];
   }
-export type {Book, Category}
+  type Theme = {
+    isLight: boolean;
+    light: {
+      text: string;
+      ui: string;
+      bg: string;
+    };
+    dark: {
+      text: string;
+      ui: string;
+      bg: string;
+    };
+  };
+      
+export type {Book, Category, Theme}

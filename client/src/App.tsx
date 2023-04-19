@@ -4,6 +4,9 @@ import './App.css'
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 import SimpleCards from './components/SimpleCards';
 import WithUseQuery from './components/WithUseQuery';
+import ThemeContextProvider from './contexts/ThemeContext';
+import NavBar from './components/NavBar';
+import Content from './components/Content';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -13,12 +16,19 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <>
+      <ThemeContextProvider>
+        <div style={{border:'1px solid blue'}}>
+        <NavBar />
+        <Content />
+        </div>
+      </ThemeContextProvider>
       <ApolloProvider client={client}>
         <WithUseQuery />
 
-      {/* Different way of sending the client to the component: */}
-      <SimpleCards client={client} />
+        {/* Different way of sending the client to the component: */}
+        <SimpleCards client={client} />
       </ApolloProvider>
+
     </>
   )
 }

@@ -37,6 +37,6 @@ const PersonSchema = new mongoose.Schema({
 
 // const Address = mongoose.model('Address', AddressSchema);
 // const User = mongoose.model('User', UserSchema);
-const Person = mongoose.model('Person', PersonSchema);
+const Person = mongoose.model('Person', PersonSchema, 'persons'); // third argument is the collection name. If not applied mongoose will rename the collection to plural form of the model name. For example, if the model name is Person then the collection name will be people. To avoid this we can pass the third argument as the collection name.
 
 export default Person;

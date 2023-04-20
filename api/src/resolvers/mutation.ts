@@ -1,5 +1,6 @@
 // import { books, ratings } from '../data';
-import { Book, Rating, Context, Args } from '../types';
+import Person from "../models/person";
+import { Book, Rating, Context, Args, PersonType } from '../types';
   export default {
     createBook: (_parent:Book, { input }:Args, {books}:Context) => {
       if('author' in input){ // input is a Book
@@ -50,5 +51,19 @@ import { Book, Rating, Context, Args } from '../types';
       const updatedBook = { ...book, ...input };
       books[index] = updatedBook;
       return updatedBook;
+    },
+    // MONGOOSE EXAMPLES:
+    createPerson: async (_parent:never, { name, age }:PersonType) => {
+      const newPerson = new Person({ name, age });
+      await newPerson.save();
+      return newPerson;
+    },
+    deletePerson: async (_parent:never, { id }:PersonType) => {
+      const result = await Person.findByIdAndDelete(id);
+      return result ? true : false;
+    },
+    updatePerson: async (_parent:never, { id, name, age }:PersonType) => {
+      const result = await Person.findByIdAndUpdate(id, {name, age});
+      return result;
     }
   }

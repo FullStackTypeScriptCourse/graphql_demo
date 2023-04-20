@@ -27,6 +27,12 @@ const typeDefs = `#graphql
     book: Book!
   }
 
+  type Person {
+    id: ID!
+    name: String!
+    age: Int!
+  }
+
   # The "Query" type is special: it lists all of the available queries that
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
@@ -36,6 +42,8 @@ const typeDefs = `#graphql
     categories: [Category!]!
     book(id: ID): Book
     category(id: ID): Category
+    persons: [Person!]!
+    person(id: ID): Person
   }
 
   type Mutation {
@@ -43,6 +51,9 @@ const typeDefs = `#graphql
     createRating(input: RatingInput!): Rating
     deleteBook(id: ID!): Boolean
     updateBook(id: ID!, input: BookInput!): Book
+    createPerson(name: String!, age: Int!): Person
+    updatePerson(id: ID!, name: String!, age: Int!): Person
+    deletePerson(id: ID!): Boolean
   }
   
   input BookInput {

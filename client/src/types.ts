@@ -13,4 +13,11 @@
     name: string;
     books: Book[];
   }
-export type {Book, Category}
+
+  type Person = {
+    id: string;
+    name: string;
+    age: number;
+  }
+
+export type {Book, Category, Person}

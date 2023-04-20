@@ -4,6 +4,7 @@ import './App.css'
 import { ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import SimpleCards from './components/SimpleCards';
 import WithUseQuery from './components/WithUseQuery';
+import PersonTable from './components/PersonTable';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -14,10 +15,7 @@ const App = () => {
   return (
     <>
       <ApolloProvider client={client}>
-        <WithUseQuery />
-
-      {/* Different way of sending the client to the component: */}
-      <SimpleCards client={client} />
+      <PersonTable/>
       </ApolloProvider>
     </>
   )

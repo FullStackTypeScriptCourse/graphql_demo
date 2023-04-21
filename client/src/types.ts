@@ -15,7 +15,7 @@
   }
 
   type Person = {
-    id: string;
+    id?: string;
     name: string;
     age: number;
   }

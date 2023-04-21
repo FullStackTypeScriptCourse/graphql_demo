@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 // https://www.apollographql.com/docs/react/get-started
-import { ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import SimpleCards from './components/SimpleCards';
 import WithUseQuery from './components/WithUseQuery';
 import PersonTable from './components/PersonTable';
+import PersonForm from './components/PersonForm';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -15,8 +16,22 @@ const App = () => {
   return (
     <>
       <ApolloProvider client={client}>
-      <PersonTable/>
-      </ApolloProvider>
+        <div className="flex justify-center h-screen my-5">
+          <div className="w-1/2 flex justify-center ">
+            <div className="w-500 h-500 bg-indigo-50">
+              <PersonTable />
+            </div>
+          </div>
+          <div className="w-1/2 flex justify-center mt-8">
+            <div className="w-500 h-500 bg-sky-50">
+              <PersonForm />
+            </div>
+          </div>
+        </div>
+      </ApolloProvider >
+
+      <hr />
+
     </>
   )
 }

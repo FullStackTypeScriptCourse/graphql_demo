@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import GetPersons from '../queries/GetAllPeople';
 import { Person } from '../types';
-import '../index.css';
-
 
 const PersonTable = () => {
     const [people, setPeople] = useState<Person[]>([{ id: '', name: '', age: 0 }]);

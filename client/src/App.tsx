@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react'
 import './App.css'
 // https://www.apollographql.com/docs/react/get-started
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import SimpleCards from './components/SimpleCards';
-import WithUseQuery from './components/WithUseQuery';
 import PersonTable from './components/PersonTable';
 import PersonForm from './components/PersonForm';
 
@@ -13,25 +11,23 @@ const client = new ApolloClient({
 });
 
 const App = () => {
+  const [person, setPerson] = useState({name:"",age:0})
   return (
     <>
       <ApolloProvider client={client}>
         <div className="flex justify-center">
           <div className="w-1/2 flex justify-center bg-indigo-50 ">
             <div className="bg-indigo-50">
-              <PersonTable />
+              <PersonTable setPerson={setPerson}/>
             </div>
           </div>
           <div className="w-1/2 flex justify-center bg-sky-50">
             <div className="bg-sky-50">
-              <PersonForm />
+              <PersonForm person={person} setPerson={setPerson}/>
             </div>
           </div>
         </div>
       </ApolloProvider >
-
-      <hr />
-
     </>
   )
 }

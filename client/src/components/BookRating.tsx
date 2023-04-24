@@ -10,7 +10,7 @@ import {Book} from '../types';
 export default ({book}:{book:Book}) => {
     const [rating, setRating] = useState({value:0, title:'', description:'', bookId:book.id});
     
-    const [mutateFunction, { data, loading, error }] = useMutation(CREATE_RATING,{
+    const [createBook, { data, loading, error }] = useMutation(CREATE_RATING,{
         refetchQueries: [GET_ALL_BOOKS]
     }); //mutateFunction is the function to call for server update. refetchQueries is the list of queries to refetch after the mutation is done. And if they were used with useQuery, they will be updated with the new data.
     if (loading) return <>'Submitting...'</>;
@@ -18,7 +18,7 @@ export default ({book}:{book:Book}) => {
 
     const createNewRating = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        mutateFunction({variables: { ratingInput: rating }}); 
+        createBook({variables: { ratingInput: rating }}); 
     }
 
     return (<>

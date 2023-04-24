@@ -16,14 +16,14 @@ const App = () => {
   return (
     <>
       <ApolloProvider client={client}>
-        <div className="flex justify-center h-screen my-5">
-          <div className="w-1/2 flex justify-center ">
-            <div className="w-500 h-500 bg-indigo-50">
+        <div className="flex justify-center">
+          <div className="w-1/2 flex justify-center bg-indigo-50 ">
+            <div className="bg-indigo-50">
               <PersonTable />
             </div>
           </div>
-          <div className="w-1/2 flex justify-center mt-8">
-            <div className="w-500 h-500 bg-sky-50">
+          <div className="w-1/2 flex justify-center">
+            <div className="bg-sky-50">
               <PersonForm />
             </div>
           </div>

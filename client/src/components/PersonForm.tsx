@@ -22,6 +22,8 @@ const PersonForm = () => {
     }
 
     return (
+            <>
+            <h2 className="flex justify-center pt-5">Create a new Person</h2>
         <div className="p-1.5 flex items-center justify-center h-screen">
             <form className="max-w-sm" onSubmit={createPerson}>
                 <div className="flex flex-wrap -mx-3 mb-6">
@@ -39,6 +41,7 @@ const PersonForm = () => {
                     </div>
                     </form>
                  </div>
+            </>
     )
 }
 export default PersonForm;

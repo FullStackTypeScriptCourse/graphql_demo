@@ -16,5 +16,9 @@ const getAllPersons = async () => {
 const createPerson = async (person: PersonType) => {
     await Object.create(person);
 };
+const updatePerson = async (id:Number, person: PersonType) => {
+    
+    
+};
 
 export { getPerson, createPerson, getAllPersons};

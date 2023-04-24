@@ -22,7 +22,7 @@ const App = () => {
               <PersonTable />
             </div>
           </div>
-          <div className="w-1/2 flex justify-center">
+          <div className="w-1/2 flex justify-center bg-sky-50">
             <div className="bg-sky-50">
               <PersonForm />
             </div>

@@ -31,11 +31,15 @@ const PersonForm = () => {
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-first-name">
                             Name
                         </label>
+                       {/* INPUT FIELD  */}
                         <input name="name" onChange={(evt)=>setPerson({...person,name:evt.target.value})} className="appearance-none block  bg-gray-50 text-gray-700 border border-gray-200 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Name" />
+
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-first-name">
                             Age
                         </label>
+                       {/* INPUT FIELD  */}
                         <input onChange={(evt)=>setPerson({...person,age:parseInt(evt.target.value)})} className="appearance-none block  bg-gray-50 text-gray-700 border border-gray-200 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="number" placeholder="Age" />
+
                         <input className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit" value="Submit" />
                     </div>
                     </div>

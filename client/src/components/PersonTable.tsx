@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 // apollo client
 import { useQuery, useMutation } from '@apollo/client';
-import GetPersons from '../queries/GetAllPeople';
+import GET_ALL_PEOPLE from '../queries/GetAllPeople';
 import { Person } from '../types';
 
 const PersonTable = () => {
@@ -15,14 +15,14 @@ const PersonTable = () => {
         console.log('editPerson', id);
     }
 
-    const [mutateFunction, { data, loading, error }] = useMutation(CREATE_PERSON,{
-        refetchQueries: [GET_ALL_PEOPLE]
-    }); //mutateFunction is the function to call for server update. refetchQueries is the list of queries to refetch after the mutation is done. And if they were used with useQuery, they will be updated with the new data.
-    if (loading) return <>'Submitting...'</>;
-    if (error) return <>`Submission error! ${error.message}`</>;
+    // const [mutateFunction, { data, loading, error }] = useMutation(CREATE_PERSON,{
+    //     refetchQueries: [GET_ALL_PEOPLE]
+    // }); //mutateFunction is the function to call for server update. refetchQueries is the list of queries to refetch after the mutation is done. And if they were used with useQuery, they will be updated with the new data.
+    // if (loading) return <>'Submitting...'</>;
+    // if (error) return <>`Submission error! ${error.message}`</>;
 
 
-    const { loading, error, data } = useQuery(GetPersons
+    const { loading, error, data } = useQuery(GET_ALL_PEOPLE
         // , { variables: { id: category.id}, }
     );
 

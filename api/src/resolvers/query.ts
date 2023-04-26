@@ -1,5 +1,5 @@
 // import { books, categories } from '../data';
-import Person from "../models/person";
+import {Person} from "../models/person";
 import { Book, Args, Context } from '../types';
 export default {
     // books: (parent, args, context) => books,
@@ -10,4 +10,5 @@ export default {
     // MONGOOSE EXAMPLES:
     persons: async ()=> await Person.find({}),//{return [{name:'perter',age:33}]}//Person.find({})
     person: async (_parent:never, { id }:Args) => await Person.findById(id),
+    address: async (_parent:never, { id }:Args) => await Person.findById(id),
 }

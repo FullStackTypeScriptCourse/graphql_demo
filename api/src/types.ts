@@ -29,4 +29,12 @@ type PersonType = {
     name: string;
     age: number;
 };
-export type { Book, Category, Rating, Context, Args, PersonType };
+type AddressType = {
+    id: string;
+    street: string;
+    city: string;
+    country: string;
+    zip: string;
+    persons: PersonType[];
+};
+export type { Book, Category, Rating, Context, Args, PersonType, AddressType };

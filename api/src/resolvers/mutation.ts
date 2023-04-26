@@ -1,6 +1,6 @@
 // import { books, ratings } from '../data';
-import Person from "../models/person";
-import { Book, Rating, Context, Args, PersonType } from '../types';
+import {Person, Address} from "../models/person";
+import { Book, Rating, Context, Args, PersonType, AddressType } from '../types';
   export default {
     createBook: (_parent:Book, { input }:Args, {books}:Context) => {
       if('author' in input){ // input is a Book
@@ -65,5 +65,22 @@ import { Book, Rating, Context, Args, PersonType } from '../types';
     updatePerson: async (_parent:never, { id, name, age }:PersonType) => {
       const result = await Person.findByIdAndUpdate(id, {name, age});
       return result;
-    }
+    },
+    createAddress: async (_parent:never, { street, city, country, zip }:AddressType) => {
+      const addr = new Address({ street, city, country, zip });
+      await addr.save();
+      return addr;
+    },
+    removePersonFromAddress: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
+      const person = await Person.find(personId);
+      const addr = await Address.find(addressId).updateOne({ $pull: { persons: person } });
+      return addr;
+      // Address.findByIdAndUpdate(addressId, { $pull: { persons: personId } });
+    },
+  //   addPersonToAddress: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
+  //     const address:AddressType = await Address.findById(addressId);
+  //     address!.persons.push(personId);
+  // await address.updateOne({ people: address.people });
+  //     return address;
+  //   },  
   }

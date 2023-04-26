@@ -15,8 +15,8 @@ const PersonForm = ({person, setPerson}: { person: Person, setPerson:(person:Per
     const [updatePerson, updatePersonData] = useMutation(UPDATE_PERSON,{
         refetchQueries: [GET_ALL_PEOPLE]
     }); 
-    if (loading) return <>'Submitting...'</>;
-    if (error) return <>`Submission error! ${error.message}`</>;
+    if (loading || updatePersonData.loading) return <>'Submitting...'</>;
+    if (error || updatePersonData.error) return <>`Submission error! ${error?error.message:updatePersonData.error}`</>;
 
     const createPerson = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

@@ -1,92 +1,92 @@
-// import { books, ratings } from '../data';
 import {Person, Address} from "../models/person";
-import { Book, Rating, Context, Args, PersonType, AddressType } from '../types';
+import { PersonDocumentType, AddressTypeDocument } from '../types';
+import { ObjectId} from 'mongoose';
   export default {
-    createBook: (_parent:Book, { input }:Args, {books}:Context) => {
-      if('author' in input){ // input is a Book
-        const newBook: Book = {
-          id: String(books.length + 1),
-          title: input.title,
-          author: input.author,
-          categoryId: input.categoryId,
-        };
-        console.log('input: ', input, newBook);
-        books.push(newBook);
-        return newBook;
-      } else {
-        return null;
-      }
-      
-    },
-    createRating: (_parent:never, { input }:Args, {ratings}:Context) => {
-      if('value' in input){ // input is a Rating
-      const newRating:Rating = {
-        id: String(ratings.length + 1),
-        value: input.value,
-        title: input.title,
-        description: input.description,
-        bookId: input.bookId,
-      };
-      console.log('rating input: ', input, newRating);
-      ratings.push(newRating);
-      return newRating;
-    } else {
-      return null;
-    }
-    },
-    deleteBook: (_parent:never, { id }:Args, {books}:Context) => {
-      const index = books.findIndex(person => person.id === id);
-      if (index === -1) {
-        return false; // person not found
-      }
-      books.splice(index, 1);
-      return true; // deletion successful
-    },
-    updateBook: (_parent: never, { id, input }:Args, {books}:Context) => {
-      const index = books.findIndex(person => person.id === id);
-      if (index === -1) {
-        return null; // person not found
-      }
-      const book = books[index];
-      const updatedBook = { ...book, ...input };
-      books[index] = updatedBook;
-      return updatedBook;
-    },
-    // MONGOOSE EXAMPLES:
-    createPerson: async (_parent:never, { name, age }:PersonType) => {
+    createPerson: async (_parent:never, { name, age }:PersonDocumentType) => {
       const newPerson = new Person({ name, age });
       await newPerson.save();
       return newPerson;
     },
-    deletePerson: async (_parent:never, { id }:PersonType) => {
+    deletePerson: async (_parent:never, { id }:PersonDocumentType) => {
       const result = await Person.findByIdAndDelete(id);
       return result ? true : false;
     },
-    updatePerson: async (_parent:never, { id, name, age }:PersonType) => {
+    updatePerson: async (_parent:never, { id, name, age }:PersonDocumentType) => {
       const result = await Person.findByIdAndUpdate(id, {name, age});
       return result;
     },
-    createAddress: async (_parent:never, { street, city, country, zip }:AddressType) => {
+    createAddress: async (_parent:never, { street, city, country, zip }:AddressTypeDocument) => {
       const addr = new Address({ street, city, country, zip });
       await addr.save();
       return addr;
     },
-    removePersonFromAddress: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
-      const person = await Person.find(personId);
-      const addr = await Address.find(addressId).updateOne({ $pull: { persons: person } });
-      return addr;
-      // Address.findByIdAndUpdate(addressId, { $pull: { persons: personId } });
-    },
-    addPersonToAddress: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
-      const address:any = await Address.findById(addressId).populate('persons');
-      const person = await Person.findById(personId);
-      // console.log('address: ', address, 'person: ', person);
-      if(address && person){
-        address.persons.push(person);
-        await address.save();
+    // removePersonFromAddressOld: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
+    //   const person : PersonDocumentType | null = await Person.findById(personId);
+    //   const address : AddressTypeDocument | null = await Address.findById(addressId);
+    //   if(!person || !address) return false;
+    //   Address.findByIdAndUpdate(addressId, { $pull: { persons: personId } });
+    //   Person.findByIdAndUpdate(personId, { address: null });
+    //   return address;
+    // },
+
+    removePersonFromAddress: async (
+      _parent: never,
+      { personId, addressId }: { personId: string, addressId: string }
+    ) => {
+      try {
+        const person = await Person.findById(personId);
+        const address = await Address.findOneAndUpdate(
+          { _id: addressId },
+          { $pull: { persons: personId } },
+          { new: true }
+        );
+        if (!person || !address) {
+          throw new Error('Person or address not found.');
+        }
+        await Person.findByIdAndUpdate(personId, { address: null });
         return true;
-      } else {
-      return false;
+      } catch (error) {
+        console.error(error);
+        return false;
       }
-    },  
-  }
+    },
+    // addPersonToAddressOld: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
+    //   const address:AddressTypeDocument | null = await Address.findById(addressId).populate('persons');
+    //   const person:PersonDocumentType | null = await Person.findById(personId);
+    //   // console.log('address: ', address, 'person: ', person);
+    //   if(address && person){
+    //     address.persons.push(person);
+    //     person.address = address;
+    //     await address.save();
+    //     return true;
+    //   } else {
+    //   return false;
+    //   }
+    // },  
+    addPersonToAddress: async (
+      _parent: never,
+      { personId, addressId }: { personId: string, addressId: string }
+    ) => {
+      try {
+        const address = await Address.findById(addressId).populate('persons') as AddressTypeDocument;
+        const person : PersonDocumentType | null = await Person.findById(personId);
+
+        if (!person) { throw new Error(`Person with ID ${personId} not found.`); }
+        if (!address) { throw new Error(`Address with ID ${addressId} not found.`); }
+        if (address.persons.some((p: any) => p.id === personId)) {
+          throw new Error(`Person with ID ${personId} is already associated with address with ID ${addressId}.`);
+        }
+        person.address = address;
+        address.persons.push(person._id);
+        await address.save();
+        await person.save();
+        // return address;
+        return true;
+      } catch (error) {
+        console.error(error);
+        // return null;
+        return false;
+      }
+    },
+};
+

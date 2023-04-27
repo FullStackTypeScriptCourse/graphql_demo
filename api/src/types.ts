@@ -1,39 +1,31 @@
-type Book = {
-    id: string;
-    title: string;
-    author: string;
-    categoryId: string;
-};
-type Category = {
-    id: string;
-    name: string;
-};
-type Rating = {
-    id: string;
-    value: number;
-    title: string;
-    description: string;
-    bookId: string;
-};
-type Context = {
-    categories: Category[];
-    ratings: Rating[];
-    books: Book[];
-};
-type Args = {
-    id: string;
-    input: Book | Rating;
-};
+import { Document } from 'mongoose';
 type PersonType = {
-    id: string;
+    // id: string;
     name: string;
     age: number;
+    address: AddressType;
 };
 type AddressType = {
-    street: string;
-    city: string;
-    country: string;
-    zip: string;
+    street: {
+        type: string;
+        required: true;
+    };
+    city: {
+        type: string;
+        required: true;
+    }
+    country: {
+        type: string;
+        required: true;
+    }
+    zip: {
+        type: string;
+        required: true;
+    }
     persons: PersonType[];
 };
-export type { Book, Category, Rating, Context, Args, PersonType, AddressType };
+
+interface AddressTypeDocument extends AddressType, Document {} // Extend both the Typescript type and the Mongoose Document type to get access to both sets of properties.
+interface PersonDocumentType extends PersonType, Document {} 
+
+export type { PersonType, AddressType, AddressTypeDocument, PersonDocumentType };

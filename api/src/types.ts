@@ -30,7 +30,6 @@ type PersonType = {
     age: number;
 };
 type AddressType = {
-    id: string;
     street: string;
     city: string;
     country: string;

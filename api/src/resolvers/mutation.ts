@@ -77,10 +77,16 @@ import { Book, Rating, Context, Args, PersonType, AddressType } from '../types';
       return addr;
       // Address.findByIdAndUpdate(addressId, { $pull: { persons: personId } });
     },
-  //   addPersonToAddress: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
-  //     const address:AddressType = await Address.findById(addressId);
-  //     address!.persons.push(personId);
-  // await address.updateOne({ people: address.people });
-  //     return address;
-  //   },  
+    addPersonToAddress: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
+      const address:any = await Address.findById(addressId).populate('persons');
+      const person = await Person.findById(personId);
+      // console.log('address: ', address, 'person: ', person);
+      if(address && person){
+        address.persons.push(person);
+        await address.save();
+        return true;
+      } else {
+      return false;
+      }
+    },  
   }

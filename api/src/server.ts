@@ -14,7 +14,9 @@ import Query from './resolvers/query';
 import Category from './resolvers/category';
 import Book from './resolvers/book';
 import Rating from './resolvers/rating';
+import Address from './resolvers/address';
 import { books, categories, ratings } from './data';
+
 import usersRouter from './routes/users';
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv'
@@ -44,6 +46,7 @@ const server = new ApolloServer<MyContext>({
   resolvers: {
     Query,
     Book,
+    Address,
     Category,
     Rating,
     Mutation,

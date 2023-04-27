@@ -70,6 +70,7 @@ type Person {
     persons: [Person!]!
     person(id: ID): Person
     address(id: ID): Address
+    addresses: [Address!]!
   }
 
   type Mutation {

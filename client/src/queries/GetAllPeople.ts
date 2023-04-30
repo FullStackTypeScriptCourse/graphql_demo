@@ -5,6 +5,13 @@ query GetPersons {
     id
     name
     age
+    address {
+      id
+      street
+      city
+      zip
+      country
+    }
   }
 }
 `;

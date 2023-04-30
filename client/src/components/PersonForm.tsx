@@ -1,10 +1,11 @@
 import { useState } from 'react';
-
 // apollo client
 import { useMutation } from '@apollo/client';
+// queries
 import GET_ALL_PEOPLE from '../queries/GetAllPeople';
 import CREATE_PERSON from '../queries/CreatePerson';
 import UPDATE_PERSON from '../queries/EditPerson';
+// types
 import { Person } from '../types';
 
 const PersonForm = ({person, setPerson}: { person: Person, setPerson:(person:Person)=>void }) => {
@@ -40,13 +41,12 @@ const PersonForm = ({person, setPerson}: { person: Person, setPerson:(person:Per
         setError('');
     }
         
-
     return (
         <>
             <h2 className="flex items-center text-4xl  dark:text-white">Create a new Person</h2>
-
             <div className="p-1.5 flex items-center justify-center h-screen">
                 {/* FORM */}
+                <div className="shadow-lg p-10">
                 <form className="max-w-sm" onSubmit={
                     person.id?editPerson:createPerson
                 }>
@@ -72,6 +72,7 @@ const PersonForm = ({person, setPerson}: { person: Person, setPerson:(person:Per
                         </div>
                     </div>
                 </form>
+                </div>
             </div>
         </>
     )

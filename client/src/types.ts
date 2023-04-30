@@ -1,23 +1,16 @@
-  type Book = {
-    id: string;
-    title: string;
-    author: string;
-    rating_average: number;
-    url: string;
-    description: string;
-    category: Category;
-  }
-  
-  type Category = {
-    id: string;
-    name: string;
-    books: Book[];
+  type Address = {
+    id?: string;
+    street: string;
+    city: string;
+    country: string;
+    zip: string;
   }
 
   type Person = {
     id?: string;
     name: string;
     age: number;
+    address?: Address;
   }
 
-export type {Book, Category, Person}
+export type {Address, Person}

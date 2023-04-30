@@ -17,7 +17,7 @@ type Person {
 }
 
   # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
+  # clients can execute, along with the return type for each. 
   type Query {
     persons: [Person!]!
     person(id: ID): Person

@@ -20,14 +20,6 @@ import { ObjectId} from 'mongoose';
       await addr.save();
       return addr;
     },
-    // removePersonFromAddressOld: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
-    //   const person : PersonDocumentType | null = await Person.findById(personId);
-    //   const address : AddressTypeDocument | null = await Address.findById(addressId);
-    //   if(!person || !address) return false;
-    //   Address.findByIdAndUpdate(addressId, { $pull: { persons: personId } });
-    //   Person.findByIdAndUpdate(personId, { address: null });
-    //   return address;
-    // },
 
     removePersonFromAddress: async (
       _parent: never,
@@ -50,19 +42,6 @@ import { ObjectId} from 'mongoose';
         return false;
       }
     },
-    // addPersonToAddressOld: async (_parent:never, { personId, addressId }:{personId:String,addressId:String}) => {
-    //   const address:AddressTypeDocument | null = await Address.findById(addressId).populate('persons');
-    //   const person:PersonDocumentType | null = await Person.findById(personId);
-    //   // console.log('address: ', address, 'person: ', person);
-    //   if(address && person){
-    //     address.persons.push(person);
-    //     person.address = address;
-    //     await address.save();
-    //     return true;
-    //   } else {
-    //   return false;
-    //   }
-    // },  
     addPersonToAddress: async (
       _parent: never,
       { personId, addressId }: { personId: string, addressId: string }

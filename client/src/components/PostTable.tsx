@@ -1,11 +1,21 @@
 import { useState } from 'react';
 import { useQuery  } from '@apollo/client';
-import  GET_POSTS  from '../queries/GetPosts';
+import  GET_POSTS from '../queries/getPaginatedPosts';
 import { Post } from '../types';
-    const PostsTable = ()=>{
-    const { loading, error, data } = useQuery(GET_POSTS);
 
-    // if (loading) return <p>Loading ...</p>;
+const PostsTable = ()=>{
+    const [page, setPage] = useState(1);
+    const [qRefresh, setQRefresh] = useState(0); // this is a hack to force a refresh of the query, because of some bug in apollo client.
+    const { loading, error, data } = useQuery(GET_POSTS, {
+        variables: { page: page, limit: 10 },
+        onCompleted: (...params) => { // the hack here.
+            setQRefresh(qRefresh + 1)
+          },
+          fetchPolicy: 'network-only',
+    });
+
+    if (loading) return <p>Loading ...</p>
+
     return (
         <>
             {error && <p>Error: ${error.message}</p>}
@@ -21,7 +31,7 @@ import { Post } from '../types';
                         </tr>
                     </thead >
                     <tbody>
-                        {data.posts.map((post: Post, idx: number) => {
+                        {data.posts_paginated1.map((post: Post, idx: number) => {
                             const style = idx % 2 === 0 ? `align-center px-6 py-4 text-sm text-gray-800 whitespace-nowrap` : `align-center px-6 py-4 text-sm text-gray-800 whitespace-nowrap bg-gray-50`;
                             return (
                                <PostTableRow key={post.id} post={post} style={style} />
@@ -30,10 +40,13 @@ import { Post } from '../types';
                         }
                     </tbody>
                 </table>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setPage(page + 1)} disabled={data.posts_paginated1.length < 10}>Next</button>
             </div>
         </>
     )
 }
+
 type RowProps = {
     post: Post,
     style: string,

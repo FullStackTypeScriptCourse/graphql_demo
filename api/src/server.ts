@@ -1,5 +1,5 @@
 // Apollo Server
-import { ApolloServer } from '@apollo/server';
+import { ApolloServer, BaseContext } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 // Mongoose
@@ -30,7 +30,7 @@ mongoose.connect(DB, {
 }).then(() => console.log('DB connection successful!'));
 
 const httpServer = http.createServer(app);
-const server = new ApolloServer({
+const server = new ApolloServer<BaseContext>({
   typeDefs,
   resolvers: {
     Query,

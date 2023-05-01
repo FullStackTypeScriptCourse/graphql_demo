@@ -7,7 +7,7 @@ type Comment {
 }
 
 type Post {
-  id: ID!
+id: ID!
 body: String!
 permalink: String!
 author: String!
@@ -20,7 +20,19 @@ date: String!
 type Query {
   posts: [Post!]!
   posts_paginated1(page: Int!, limit: Int!): [Post!]!
-  # posts_paginated2(page: Int!, limit: Int!): [Post!]!
+  # posts_paginated2(page: Int!, limit: Int!, sort: PostSortParameters): [Post!]!
+}
+
+enum PostStateEnum {
+  ID
+  AUTHOR
+  TITLE
+  DATE
+}
+
+type PostSortParameters {
+  field: PostStateEnum!
+  asc: Boolean!
 }
 `;
 

@@ -1,6 +1,7 @@
 # Simple GraphQL with both backend and frontend in react
 
 ## How to use
+- Change the .env file to use the correct database. For this branch it is the `sample_training` database on Atlas Mongodb.
 #### Backend
 - From inside the api folder, run `npm install` and then `npm run dev` to start the server. Then in another terminal window, from inside the client folder, run `npm install` and then `npm run dev` to start the client.
 - Open the browser and go to `http://localhost:4000/graphql` to see the GraphQL playground.

@@ -5,7 +5,7 @@ import { Post } from '../types';
     const PostsTable = ()=>{
     const { loading, error, data } = useQuery(GET_POSTS);
 
-    if (loading) return <p>Loading ...</p>;
+    // if (loading) return <p>Loading ...</p>;
     return (
         <>
             {error && <p>Error: ${error.message}</p>}

@@ -52,11 +52,7 @@ npx tsc --init
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import typeDefs from './graphql_schemas';
-import Mutation from './resolvers/mutation';
 import Query from './resolvers/query';
-import Book from './resolvers/book';
-import Category from './resolvers/category';
-import { books, categories, ratings } from './data';
 const resolvers = {
 };
 

@@ -13,12 +13,8 @@ import cors from 'cors';
 import * as dotenv from 'dotenv'
 // Mongoose
 import typeDefs from './graphql_schemas';
-import Mutation from './resolvers/mutation';
 import Query from './resolvers/query';
-import Address from './resolvers/address';
-import Person from './resolvers/person';
 
-import usersRouter from './routes/users';
 dotenv.config();
 // console.log('DB: ... :',process.env)
 
@@ -38,9 +34,6 @@ const server = new ApolloServer({
   typeDefs,
   resolvers: {
     Query,
-    Address,
-    Person,
-    Mutation,
   },
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
@@ -57,10 +50,3 @@ expressMiddleware(server, {}));
 // top level await is now supported since typescript 3.8
 await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
 console.log(`🚀 GraphQL Server ready at http://localhost:4000/graphql`);
-
-app.use('/api/users', usersRouter);
-console.log(`🚀 Users API ready at http://localhost:4000/api/users`);
-
-app.get('*', function(req, res){
-  res.send({ status: 404, message: 'Ressource not found' });
-});

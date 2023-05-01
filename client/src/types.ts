@@ -1,16 +1,16 @@
-  type Address = {
+  type Post = {
     id?: string;
-    street: string;
-    city: string;
-    country: string;
-    zip: string;
+    title: string;
+    body: string;
+    author: string;
+    permalink: string;
+    tags: string[];
+    comments: Comment[];
+    date: string;
   }
-
-  type Person = {
-    id?: string;
-    name: string;
-    age: number;
-    address?: Address;
+  type Comment = {
+    body: string;
+    email: string;
+    
   }
-
-export type {Address, Person}
+export type {Post}

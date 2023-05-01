@@ -1,7 +1,9 @@
-import {Person, Address} from "../models/person";
+import {Post} from "../models/post";
 export default {
-    persons: async ()=> { const lst = await Person.find({}).populate('address'); console.log('POPULATE: ',lst); return lst},//{return [{name:'perter',age:33}]}//Person.find({})
-    person: async (_parent:never, { id }:{id:String}) => await Person.findById(id).populate('address'),
-    address: async (_parent:never, { id }:{id:String}) => await Address.findById(id),
-    addresses: async ()=> await Address.find({}).populate('persons'),
+    posts: async ()=> { const lst = await Post.find({}).populate('comments'); console.log('POPULATE: ',lst); return lst},
+    posts_paginated1: async (parent: any, {page, limit}: any, context: any, info: any)=> {
+        const skip = (page - 1) * limit;
+        const lst = await Post.find({}).skip(skip).limit(limit).populate('comments');
+        return lst;
+    } // Run with: query { posts_paginated(page: 1, limit: 2) { id body permalink author title tags comments { body email author } date } }
 }

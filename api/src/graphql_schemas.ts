@@ -1,38 +1,27 @@
 const typeDefs = `#graphql
 
-type Address {
-  id: ID!
-  street: String!
-  city: String!
-  country: String!
-  zip: String!
-  persons: [Person!]! 
+type Comment {
+  body: String!
+  email: String!
+  author: String!
 }
 
-type Person {
+type Post {
   id: ID!
-  name: String!
-  age: Int!
-  address: Address
+body: String!
+permalink: String!
+author: String!
+title: String!
+tags: [String!]!
+comments: [Comment!]!
+date: String!
 }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. 
-  type Query {
-    persons: [Person!]!
-    person(id: ID): Person
-    address(id: ID): Address
-    addresses: [Address!]!
-  }
-
-  type Mutation {
-    createPerson(name: String!, age: Int!): Person
-    updatePerson(id: ID!, name: String!, age: Int!): Person
-    deletePerson(id: ID!): Boolean
-    createAddress(street: String!, city: String!, country: String!, zip: String!): Address
-    removePersonFromAddress(personId: ID!, addressId: ID!): Boolean
-    addPersonToAddress(personId: ID!, addressId: ID!): Boolean
-  }
+type Query {
+  posts: [Post!]!
+  posts_paginated1(page: Int!, limit: Int!): [Post!]!
+  # posts_paginated2(page: Int!, limit: Int!): [Post!]!
+}
 `;
 
 export default typeDefs;

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 // apollo client
-import { useMutation } from '@apollo/client';
+import { ApolloCache, useMutation } from '@apollo/client';
 import GET_ALL_PEOPLE from '../queries/GetAllPeople';
+import GET_ALL_ADDRESSES from '../queries/GetAllAddresses';
 // import CREATE_PERSON from '../queries/CreatePerson';
 import CREATE_ADDRESS from '../queries/CreateAddress';
 import UPDATE_ADDRESS from '../queries/EditAddress';
@@ -11,7 +12,7 @@ import { Address } from '../types';
 const AddressForm = ({personId, address, setAddress}: { personId: String, address: Address, setAddress:(address:Address)=>void }) => {
     const [errorMsg, setError] = useState('');
     const [mutateFunction, { data, loading, error }] = useMutation(CREATE_ADDRESS, {
-        refetchQueries: [GET_ALL_PEOPLE]
+         refetchQueries: [GET_ALL_PEOPLE]
     }); //mutateFunction is the function to call for server update. refetchQueries is the list of queries to refetch after the mutation is done. And if they were used with useQuery, they will be updated with the new data.
     const [updateAddress, updateAddressData] = useMutation(UPDATE_ADDRESS,{
         refetchQueries: [GET_ALL_PEOPLE]

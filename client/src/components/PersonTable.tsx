@@ -7,7 +7,7 @@ import { MOVE_PERSON_OUT } from '../queries/MovePerson';
 import GET_PERSONS from "../queries/GetAllPeople";
 
 const PersonTable = ({setPerson, setShowForm}:{setPerson:(person:Person)=>void, setShowForm:(input:String)=>void}) => {
-    const { loading, error, data } = useQuery(GET_ALL_PEOPLE);
+    const { loading, error, data, fetchMore } = useQuery(GET_ALL_PEOPLE); // fetchMore is designed for pagination. Second argument is optional variables.
 
     if (loading) return <p>Loading ...</p>;
 
@@ -57,7 +57,9 @@ const PersonTableRow = ({ person, setPerson, style }: RowProps) => {
         refetchQueries: [GET_PERSONS]
     });
     const [movePersonOut, movePersonOutData] = useMutation(MOVE_PERSON_OUT,{
-        refetchQueries: [GET_PERSONS]
+        refetchQueries: [GET_PERSONS],
+        // Without fetching again from the server, I can update the cache with the new address
+
     });
 
     if(deletePersonData.loading) return (<p>Deleting...</p>)

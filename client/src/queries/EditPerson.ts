@@ -7,6 +7,13 @@ mutation UpdatePerson($updateId: ID!, $name:String!, $age:Int!) {
       id
       name
       age
+      address {
+        id
+        street
+        city
+        zip
+        country
+      }
     }
   }`;
 export default UPDATE_PERSON;

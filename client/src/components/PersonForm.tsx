@@ -10,11 +10,33 @@ import { Person } from '../types';
 
 const PersonForm = ({person, setPerson}: { person: Person, setPerson:(person:Person)=>void }) => {
     const [errorMsg, setError] = useState('');
+
     const [mutateFunction, { data, loading, error }] = useMutation(CREATE_PERSON, {
-        refetchQueries: [GET_ALL_PEOPLE]
+        refetchQueries: [GET_ALL_PEOPLE], // refetchQueries is a list of queries to refetch after the mutation is done. And if they were used with useQuery, they will be updated with the new data, But it DOES make a new request to the server.
     }); //mutateFunction is the function to call for server update. refetchQueries is the list of queries to refetch after the mutation is done. And if they were used with useQuery, they will be updated with the new data.
+
     const [updatePerson, updatePersonData] = useMutation(UPDATE_PERSON,{
-        refetchQueries: [GET_ALL_PEOPLE]
+        // refetchQueries: [GET_ALL_PEOPLE] // Updates page by refetching data from server.
+
+        // Update cache without refetching by using the update function
+        update: (cache, { data: { updatePerson } }) => {
+            console.log('updatePerson: ',updatePerson); // updatePerson is the response from the server. Must be the right name here of the data.
+
+            const readQ  = cache.readQuery({ query: GET_ALL_PEOPLE });
+            const persons = (readQ as {persons: Person[]}).persons;
+            const listIndexOfChangedPerson = persons.findIndex((person) => person.id === updatePerson.id);
+
+            cache.writeQuery({
+                query: GET_ALL_PEOPLE,
+                data: {
+                    persons: [
+                        ...persons.slice(0, listIndexOfChangedPerson),
+                        updatePerson,
+                        ...persons.slice(listIndexOfChangedPerson + 1)
+                    ]
+                },
+            });
+        }
     }); 
     if (loading || updatePersonData.loading) return <>'Submitting...'</>;
     if (error || updatePersonData.error) return <>`Submission error! ${error?error.message:updatePersonData.error}`</>;

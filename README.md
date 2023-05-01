@@ -17,4 +17,4 @@
   2. PersonForm
     - Allows you to add a new Person to the database. And updates the table.
 
-
+- Apollo client **cache update example** is shown in the `PersonForm` component. The cache is updated after an existing Person is updated.

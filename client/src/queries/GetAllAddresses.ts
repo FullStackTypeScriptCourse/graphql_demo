@@ -11,6 +11,7 @@ query GetAllAddresses {
         id
         name
         age
+    }
   }
 }
 `;

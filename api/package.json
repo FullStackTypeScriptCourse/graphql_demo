@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon",
+    "demo": "ts-node ./src/demo.ts",
     "build": "rimraf ./build && tsc"
   },
   "keywords": [

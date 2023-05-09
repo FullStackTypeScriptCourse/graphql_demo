@@ -59,7 +59,7 @@ type Mutation {
   createUser(input: CreateUserInput!): User!
   updateUser(email: String!, input: UpdateUserInput!): User!
   deleteUser(username: String!): User!
-  completeTask(userId: String!, taskId: Int!): Completed!
+  completeTask(userId: String!, taskId: String!, answer:Float!, measureUnitId:String!): Completed!
   createMeasureUnit(name: String, category: MeasureUnitCategory): MeasureUnit!
 }
 

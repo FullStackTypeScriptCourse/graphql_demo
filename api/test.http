@@ -102,3 +102,23 @@ Authorization:{{adminToken}}
     "query": "mutation UpdateUser($email: String!, $input: UpdateUserInput!) { updateUser(email: $email, input: $input) { username email password roles } }",
     "variables": { "email": "jill@webtrade.dk", "input": { "roles": ["user"] } }
 }
+
+### Delete User (protected by admin role)###
+POST {{baseUrl}}/graphql HTTP/1.1
+Content-Type: application/json
+Authorization:{{adminToken}}
+
+{
+    "query": "mutation DeleteUser($username: String!) { deleteUser(username: $username) { email } }",
+    "variables": {"username": "jacob"}
+}
+
+### Complete Task (protected by admin role)###
+POST {{baseUrl}}/graphql HTTP/1.1
+Content-Type: application/json
+Authorization:{{adminToken}}
+
+{
+    "query": " mutation CompleteTask($userId: String!, $taskId: String!, $answer: Float!, $measureUnitId: String!) { completeTask(userId: $userId, taskId: $taskId, answer: $answer, measureUnitId: $measureUnitId) { approved date } } ",
+    "variables": { "userId": "6457343599be428427a709f6", "taskId": "6459efda5f5c557e378f4969", "answer": 7140.0, "measureUnitId": "6456443ed465ca94f8a3ed64" }
+}

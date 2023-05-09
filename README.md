@@ -18,4 +18,8 @@
   2. PersonForm
     - Allows you to add a new Person to the database. And updates the table.
 
-
+### Steps for building the backend with GraphQL and authentication
+1. Create a login endpoint that returns a JWT token.
+2. In the graphql endpoint add the JWT token to the context or unpack the token and add the user to the context.
+3. Create a resolver that looks for the user in the context and if the user has the correct role, then allow the query or mutation to be executed otherwise throw an error.
+4. To avoid having to check for user and roles in every resolver, create a decorator that can be used on the resolvers that require authentication and authorization.

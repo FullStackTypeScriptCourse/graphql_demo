@@ -48,12 +48,12 @@ const measureUnitSchema = new mongoose.Schema({
 
 // define schema for Completed
 const completedSchema = new mongoose.Schema({
-  id: { type: Number, required: true },
   date: { type: Date, default: Date.now },
-  task: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  task: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true, unique: false },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: false },
   approved: { type: Boolean, required: true }
 });
+completedSchema.index({ task: 1, user: 1 }, { unique: true }); // Make sure the same user can only complete the same task once.
 
 // create models for each schema
 const Task = mongoose.model('Task', taskSchema);

@@ -16,7 +16,7 @@ const createTask = async(_parent: never, { input }: { input: ITask }) => {
     throw new Error(`MeasureUnit not found with name ${input.measureUnit.name}`);
   }
   try{
-    const task = new Task({...input, measureUnit: measureUnit._id})//, measureUnit: measureUnit._id});
+    const task = new Task({...input, measureUnit: measureUnit._id});//, measureUnit: measureUnit._id});
     await task.save();
     console.log(task);
     return task;
@@ -57,7 +57,7 @@ const deleteUser = async (_: never, { username }: { username: String }) => {
     return user;
 };
 
-const completeTask = async (_: never, { userId, taskId, answer, measureUnit}: { userId: String, taskId: number, answer:number, measureUnit: IMeasureUnit }) => {
+const completeTask = async (_: never, { userId, taskId, answer, measureUnitId}: { userId: string, taskId: string, answer:number, measureUnitId: string }) => {
     const user = await User.findById(userId);
     const task = await Task.findById(taskId).populate('measureUnit');
 
@@ -65,11 +65,21 @@ const completeTask = async (_: never, { userId, taskId, answer, measureUnit}: { 
       throw new Error('User or task not found');
     }
     const correctAnswer = task.correctAnswer as number;
-    const correctMeasureUnit = task.measureUnit as unknown as IMeasureUnit;
-    if(isCorrectAnswer(answer, correctAnswer, measureUnit, correctMeasureUnit)) {}
-    const completed = new Completed({ user, task });
-    await completed.save();
-    return completed;
+    const correctMeasureUnitId = task.measureUnit._id.toString() ;
+    if(isCorrectAnswer(answer, correctAnswer, measureUnitId, correctMeasureUnitId)) {
+      console.log('Correct answer. Now saving completed task');
+      try{
+
+      const completed = new Completed({approved: true, user:user._id, task:task._id });
+      await completed.save();
+      return completed;
+
+      } catch (err: any) {
+        console.log(err);
+        throw new Error(err);
+      }
+    }
+    throw new Error('Incorrect answer');
 };
 
 const createMeasureUnit = async (_parent: never, input: IMeasureUnit) => {

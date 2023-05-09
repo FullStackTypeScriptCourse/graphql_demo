@@ -29,12 +29,13 @@ const authenticate = (role: string, resolve: any) => {
 };
 
 // Always compare the answer and correctAnswer as floats rounded to how many DECIMAL PLACES are on the correct answer.
-const isCorrectAnswer = (answer: number, correctAnswer: number, answerMeasureUnit: IMeasureUnit, serverMeasureUnit: IMeasureUnit) => {
+const isCorrectAnswer = (answer: number, correctAnswer: number, answerMeasureUnitId: string, serverMeasureUnitId: string) => {
     const numberOfDecimals = correctAnswer.toString().split('.')[1]?.length || 0;
     const multipleOfTen = Math.pow(10, numberOfDecimals);
     answer = Math.round(answer * multipleOfTen) / multipleOfTen;
+    console.log('isCorrectAnswer', answer, correctAnswer, answerMeasureUnitId, serverMeasureUnitId);
     // answer = parseFloat(answer.toFixed(numberOfDecimals));
-    return answer === correctAnswer && serverMeasureUnit === answerMeasureUnit;
+    return answer === correctAnswer && serverMeasureUnitId === answerMeasureUnitId;
 };
 
 export { userFromToken, authenticate, isCorrectAnswer};

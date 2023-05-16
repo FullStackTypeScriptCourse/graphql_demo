@@ -49,7 +49,10 @@ const server = new ApolloServer<BaseContext>({
 
 await server.start();
 
-app.use('/api/users', json(), usersRouter);
+app.use('/api/users',
+cors<cors.CorsRequest>(),
+json(), 
+usersRouter);
 console.log(`🚀 Users API ready at http://localhost:4000/api/users`);
 
 app.use('/graphql', 

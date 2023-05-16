@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery  } from '@apollo/client';
-import  GET_POSTS from '../queries/getPaginatedPosts';
+import  GET_POSTS from '../queries/queries';
 import { Post } from '../types';
 
 const PostsTable = ()=>{

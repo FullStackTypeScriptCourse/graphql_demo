@@ -7,6 +7,7 @@ const userFromToken = async (token:string) => {
         return null;
     }
     try {
+        // jwt.verify will throw an error if the token is invalid or expired.
         let decoded = jwt.verify(token, process.env.JWT_SECRET as jwt.Secret) as { userId: string };
         const user = await User.findById(decoded.userId, ['-password','-__v']); // exclude 'password' and '__v' from the user object (__v is a mongo version tracker prop).
         return user;

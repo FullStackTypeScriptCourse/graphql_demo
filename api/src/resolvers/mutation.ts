@@ -38,6 +38,7 @@ const deleteTask = async (_: never, { id }: { id: number }) => {
 
 const createUser = async (_: never, { input }: { input: IUser }) => {
   const user = new User(input);
+  user.set({ roles: input.password })
   await user.save();
   return user;
 };
@@ -116,6 +117,7 @@ export default {
   updateTask: authenticate('admin',updateTask),
   deleteTask: authenticate('admin',deleteTask),
   createUser: authenticate('admin',createUser),
+  // createUser: createUser,
   updateUser: authenticate('admin',updateUser),
   deleteUser: authenticate('admin',deleteUser),
   completeTask: authenticate('admin',completeTask),

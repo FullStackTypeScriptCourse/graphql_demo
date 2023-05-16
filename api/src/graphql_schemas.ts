@@ -12,11 +12,13 @@ enum MeasureUnitCategory {
 }
 
 type MeasureUnit {
+  id: ID!
   name: String!
   category: MeasureUnitCategory!
 }
 
 type Task {
+  id: ID!
   name: String!
   title: String!
   imageUrl: String!
@@ -29,6 +31,7 @@ type Task {
 }
 
 type User {
+  id: ID!
   username: String!
   email: String!
   password: String
@@ -36,6 +39,7 @@ type User {
 }
 
 type Completed {
+  id: ID!
   date: Date!
   task: Task!
   user: User!
@@ -45,10 +49,11 @@ type Completed {
 type Query {
   task(id: String!): Task
   tasks: [Task!]!
-  user(username: String!): User
+  user(email: String!): User
   users: [User!]!
   measureUnits: [MeasureUnit!]!
   completedTasks(userId: String!): [Completed!]!
+  notCompletedTasks(userId: String!): [Task!]!
   tasksByLevel(level: Int!): [Task!]!
 }
 

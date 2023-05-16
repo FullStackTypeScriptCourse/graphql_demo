@@ -3,12 +3,21 @@
 # @norolestoken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU3MzQzNTk5YmU0Mjg0MjdhNzA5ZjYiLCJ1c2VyTmFtZSI6ImpvZSIsImlhdCI6MTY4MzUzMjM0MSwiZXhwIjoxNjgzNTM0MTQxfQ.ujQIWA59CYnS3F8bs8jmAbXtTDICp1NoZQ_8KOheeE8
 
 ### login ADMIN user
-# @name adminLogin
+# @name adminUserLogin
 POST {{baseUrl}}/api/users/login HTTP/1.1
 Content-Type: application/json
 
 {
     "email": "thomas@webtrade.dk",
+    "password": "test123"
+}
+### login user with ADMIN role
+# @name adminLogin
+POST {{baseUrl}}/api/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "joe@webtrade.dk",
     "password": "test123"
 }
 ### login user with NO ROLES
@@ -17,21 +26,25 @@ POST {{baseUrl}}/api/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "joe@webtrade.dk",
-    "password": "test123"
+    "email": "hans@mail.com",
+    "password": "pass123"
 }
 ### Remember to execute adminLogin and noRolesLogin to fill the below 2 variables ###
+@adminUserToken = {{adminUserLogin.response.body.token}}
 @adminToken = {{adminLogin.response.body.token}}
 @noRolesToken = {{noRolesLogin.response.body.token}}
 
+### Validate the Token ###
+HEAD {{baseUrl}}/api/users/validate-token HTTP/1.1
+Authorization:{{adminToken}}
 
-### Send token to graphql endpoint ###
+### See all users. (Send token to graphql endpoint) ###
 POST {{baseUrl}}/graphql HTTP/1.1
 Content-Type: application/json
 Authorization:{{adminToken}}
 
 {
-  "query": "query { users { username roles } }"
+  "query": "query { users {id username roles password email } }"
 }
 
 ### See all tasks ###
@@ -100,7 +113,7 @@ Authorization:{{adminToken}}
 
 {
     "query": "mutation UpdateUser($email: String!, $input: UpdateUserInput!) { updateUser(email: $email, input: $input) { username email password roles } }",
-    "variables": { "email": "jill@webtrade.dk", "input": { "roles": ["user"] } }
+    "variables": { "email": "joe@webtrade.dk", "input": { "roles": ["admin"] } }
 }
 
 ### Delete User (protected by admin role)###

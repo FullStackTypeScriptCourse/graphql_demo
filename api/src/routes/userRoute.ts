@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-    const token = jwt.sign({ userId: user._id, userName: user.username }, process.env.JWT_SECRET as string, {
+    const token = jwt.sign({ userId: user._id, userName: user.username, roles: user.roles }, process.env.JWT_SECRET as string, {
       expiresIn: 60 * 30, // 30 minutes
     });
     res.status(200).json({ token });
@@ -31,5 +31,21 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: `Server error: ${error}` });
   }
 });
+
+router.post('/validate-token', async (req, res) => {
+    const token = req.headers.authorization || '';
+    if (!token) {
+      return res.status(400).json({ valid: false, msg: 'Bad Request: No token provided' });
+    }
+    // Check if token is valid and not expired
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      console.log('DECODED: ', decoded);
+      return res.status(200).json({ valid: true });
+    } catch (error) {
+      console.error(error);
+      return res.status(401).json({ valid: false });
+    }
+  });
 
 export default router;

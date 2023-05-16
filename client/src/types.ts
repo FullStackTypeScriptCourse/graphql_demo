@@ -1,16 +1,22 @@
-  type Post = {
-    id?: string;
-    title: string;
-    body: string;
-    author: string;
-    permalink: string;
-    tags: string[];
-    comments: Comment[];
-    date: string;
-  }
-  type Comment = {
-    body: string;
-    email: string;
-    
-  }
-export type {Post}
+type Role = "user" | "admin";
+interface User {
+  username: string;
+  email: string;
+  roleList: Role[];
+}
+
+interface NewUser extends User {
+  userPass: string;
+  confirmPass: string;
+}
+
+const emptyUser: NewUser = {
+  roleList: [],
+  username: '',
+  email: '',
+  userPass: '',
+  confirmPass: ''
+};
+
+
+export { emptyUser, type NewUser, type User, type Role };

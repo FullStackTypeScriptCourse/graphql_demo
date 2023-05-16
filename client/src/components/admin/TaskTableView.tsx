@@ -17,7 +17,7 @@ const TaskTable = ({columns, data, title, setTask, deleteTask}:TaskTableProps) =
                 <div className="shadow-lg">
             <h2 className="text-4xl  dark:text-white">{title}</h2>
                 <table className=" divide-y divide-gray-200">
-                    <thead className="bg-orange-500">
+                    <thead className="bg-orange-300">
                         <tr>
                         {columns.map((column, idx) => {
                             return (
@@ -29,7 +29,7 @@ const TaskTable = ({columns, data, title, setTask, deleteTask}:TaskTableProps) =
                     </thead >
                     <tbody>
                         {data.map((task: ITask, idx: number) => {
-                            const style = idx % 2 === 0 ? `align-center px-6 py-4 text-sm text-gray-800 whitespace-nowrap bg-orange-200` : `align-center px-6 py-4 text-sm text-gray-800 whitespace-nowrap bg-orange-300`;
+                            const style = idx % 2 === 0 ? `align-center px-6 py-4 text-sm text-gray-800 whitespace-nowrap bg-orange-50` : `align-center px-6 py-4 text-sm text-gray-800 whitespace-nowrap bg-orange-100`;
                             return (
                                <TableRow key={task.id} task={task} setTask={setTask} deleteTask={deleteTask} tdStyle={style} onClick={()=>alert("ROW CLICKED")}/>
                             )

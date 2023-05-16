@@ -5,17 +5,18 @@ import { emptyUser } from "../types";
 import { CREATE_USER } from "../queries/mutations";
 import { useMutation } from "@apollo/client";
 import { create } from "@mui/material/styles/createTransitions";
+import { useAuth } from "../hooks/AuthContext";
 
 interface UserRegistrationFromProps {
-	afterSubmit?: () => void;
     toggleModal: () => void;
 }
 
-const UserRegistrationForm = ({ afterSubmit, toggleModal }: UserRegistrationFromProps) => {
+const UserRegistrationForm = ({  toggleModal }: UserRegistrationFromProps) => {
 	const [formData, setFormData] = useState(emptyUser);
 	const [createUser, createUserResponse] = useMutation(CREATE_USER, {
         // refetchQueries: [GET_ALL_PEOPLE] // Updates page by refetching data from server.
 	});
+	const {login} = useAuth();
 
 
 	const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -37,8 +38,8 @@ const UserRegistrationForm = ({ afterSubmit, toggleModal }: UserRegistrationFrom
 
 		// TODO: Add user to database
 		//updatePerson({ variables: {updateId:person.id, name:person.name, age:person.age} });
-		createUser({ variables: {"input":{ username: formData.username, email: formData.email, password: formData.userPass }}});
-
+		await createUser({ variables: {"input":{ username: formData.username, email: formData.email, password: formData.userPass }}});
+		await login(formData.username, formData.userPass);
 		reset();
         toggleModal();
 	};

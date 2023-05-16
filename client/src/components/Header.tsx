@@ -22,7 +22,6 @@ function Header({ toggleModal }: { toggleModal: () => void }) {
                     route={"/"}
                     icon={faHome}
                     label={"Home"}
-                    end
                 />
                 {state.loggedIn && (<>
                 <NavItem
@@ -63,9 +62,10 @@ function Header({ toggleModal }: { toggleModal: () => void }) {
                 />
                 <NavItem
                     allowedRoles={["user"]}
-                    route={"/user/view/stats"}
+                    route={"/user"}
                     icon={faChartLine}
                     label={"see your stats"}
+                    end // stops showing active border on nav item when subroutes are active.
                 />
                  <LoggedIn />
                 </>)}

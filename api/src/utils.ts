@@ -13,7 +13,7 @@ const userFromToken = async (token:string) => {
         return user;
     }
     catch (error) {
-        console.error(error);
+        console.error('ERROR IN USERFROMTOKEN',error);
         return null;
     }
 };

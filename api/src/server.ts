@@ -68,6 +68,7 @@ expressMiddleware(server, {
     console.log('TOKEN: ', token);
     // Try to retrieve a user with the token
     const user = await userFromToken(token);
+    
     console.log('USER: ', user?.username);
     // Add the user to the context
     return { user };

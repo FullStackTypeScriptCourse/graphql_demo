@@ -1,10 +1,11 @@
-import { Task, User, MeasureUnit, Completed } from "../models/allmodels";
+import { Task, User, MeasureUnit, Completed, TaskCategory } from "../models/allmodels";
 import { isCorrectAnswer} from "../utils";
 import {
   IUser,
   ITask,
   IMeasureUnit,
   MeasureUnitCategory,
+  TaskCategoryType,
 } from "../types";
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { authenticate } from "../utils";
@@ -12,11 +13,15 @@ import { authenticate } from "../utils";
 const createTask = async(_parent: never, { input }: { input: ITask }) => {
   // console.log(input);
   const measureUnit = await MeasureUnit.findOne(input.measureUnit);
+  const category = await TaskCategory.findOne({name:input.category});
   if (!measureUnit) {
     throw new Error(`MeasureUnit not found with name ${input.measureUnit.name}`);
   }
+  if (!category) {
+    throw new Error(`Task Category not found with name ${input.category.name}`);
+  }
   try{
-    const task = new Task({...input, measureUnit: measureUnit._id});//, measureUnit: measureUnit._id});
+    const task = new Task({...input, measureUnit: measureUnit._id, category: category._id});//, measureUnit: measureUnit._id});
     await task.save();
     console.log(task);
     return task;
@@ -38,7 +43,7 @@ const deleteTask = async (_: never, { id }: { id: number }) => {
 
 const createUser = async (_: never, { input }: { input: IUser }) => {
   const user = new User(input);
-  user.set({ roles: input.password })
+  user.set({ roles: ['student'] })
   await user.save();
   return user;
 };
@@ -71,7 +76,7 @@ const completeTask = async (_: never, { userId, taskId, answer, measureUnitId}: 
       console.log('Correct answer. Now saving completed task');
       try{
 
-      const completed = new Completed({approved: true, user:user._id, task:task._id });
+      const completed = new Completed({approved: true, user:userId, task:taskId });
       await completed.save();
       return completed;
 
@@ -111,15 +116,42 @@ const createMeasureUnit = async (_parent: never, input: IMeasureUnit) => {
       throw new Error('Error creating measure unit');
     }
   };
+  const createTaskCategory = async (_parent: never, {name}: {name:string}) => {
+
+    console.log('Creating task category', name);
+
+    // Check that the category name is one of the allowed values from the enum
+    if (!Object.values(TaskCategoryType).includes(name)) {
+      console.log('Invalid task category', Object.values(TaskCategoryType), name);
+      throw new Error('Invalid task category name'+name);
+    }
+
+    try {
+      const taskCategory = new TaskCategory({ name:name, });
+
+      await taskCategory.save();
+      return taskCategory.toObject();
+
+    } catch (error: any) { // errors must be any or unknown.
+      console.log('Error creating measure unit', error);
+
+      if (error.extensions?.code === ApolloServerErrorCode.BAD_USER_INPUT) {
+        // Duplicate key error: name already exists
+        throw new Error('Task Category name already exists');
+      }
+      throw new Error('Error creating task category unit');
+    }
+  };
 
 export default {
   createTask: authenticate('admin',createTask), // only authenticated admin can create tasks
   updateTask: authenticate('admin',updateTask),
   deleteTask: authenticate('admin',deleteTask),
-  createUser: authenticate('admin',createUser),
+  createUser: createUser,
   // createUser: createUser,
   updateUser: authenticate('admin',updateUser),
   deleteUser: authenticate('admin',deleteUser),
-  completeTask: authenticate('admin',completeTask),
+  completeTask: authenticate('student',completeTask),
   createMeasureUnit: authenticate('admin',createMeasureUnit),
+  createTaskCategory: authenticate('admin',createTaskCategory),
 }

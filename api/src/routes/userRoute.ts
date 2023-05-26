@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
     const token = jwt.sign({ userId: user._id, userName: user.username, roles: user.roles }, process.env.JWT_SECRET as string, {
-      expiresIn: 60 * 30, // 30 minutes
+      expiresIn: 60 * 60, // 60 minutes
     });
     res.status(200).json({ token });
   } catch (error) {
@@ -32,20 +32,27 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/validate-token', async (req, res) => {
+router.head('/validate-token', async (req, res) => {
     const token = req.headers.authorization || '';
+    console.log('HEADERS: ', req.headers);
+    res.setHeader('Cache-Control', 'no-store');
+    // return res.status(401).json({ valid: false });
     if (!token) {
       return res.status(400).json({ valid: false, msg: 'Bad Request: No token provided' });
     }
     // Check if token is valid and not expired
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      const decoded = jwt.verify(token as string, process.env.JWT_SECRET as string);
       console.log('DECODED: ', decoded);
       return res.status(200).json({ valid: true });
     } catch (error) {
-      console.error(error);
+      console.error('VALIDATIONERROR: ',error);
       return res.status(401).json({ valid: false });
     }
+  });
+
+router.get('*', function(req, res){
+    res.send({ status: 404, message: 'Ressource not found' });
   });
 
 export default router;

@@ -9,12 +9,48 @@ enum MeasureUnitCategory {
   TEMPERATURE
   WEIGHT
   ANGLE
+  SPEED
+}
+
+enum TaskCategoryName {
+  TRIGONOMETRI
+  GEOMETRI
+  MAENGDELAERE
+  BROEKER
+  PROCENTER
+  LIGNINGER
+  FUNKTIONER
+  STATISTIK
+  ALGEBRA
+  TALTEORI
+  LOGARITMER
+  DIFFERENTIALLIGNINGER
+  INTEGRALER
+  VEKTORER
+  MATRICER
+  KOMBINATORIK
+  SANDSYNLIGHEDSREGNING
+  STOKASTIK
+  ANALYSE
+  GEOMETRI_3D
+  SPEJLINGER
+  AREAL
+  RUMFANG
+  OVERFLADEAREAL
+  VALUTA
+  DIVISION_MULTIPLIKATION
 }
 
 type MeasureUnit {
   id: ID!
   name: String!
   category: MeasureUnitCategory!
+}
+
+type TaskCategory {
+  id: ID!
+  #name: TaskCategoryName! # Could not use the graphql enum with dansih letters, so I had to use a string instead
+  name: String!
 }
 
 type Task {
@@ -28,6 +64,7 @@ type Task {
   correctAnswer: Float
   # Comment: how to retrieve the measureUnit is described in resolvers/resolverTypes.ts
   measureUnit: MeasureUnit!
+  category: TaskCategory!
 }
 
 type User {
@@ -36,6 +73,28 @@ type User {
   email: String!
   password: String
   roles: [String!]!
+}
+
+type Student {
+  id: ID!
+  studentId: String
+  class: Class!
+  studyPoints: Int!
+}
+
+type Class {
+  id: ID!
+  name: String!
+  level: Int
+  students: [Student!]!
+  assignments: [Assignment!]!
+}
+
+type Assignment {
+  id: ID!
+  class: Class!
+  tasks: [Task!]!
+  dueDate: Date!
 }
 
 type Completed {
@@ -52,9 +111,14 @@ type Query {
   user(email: String!): User
   users: [User!]!
   measureUnits: [MeasureUnit!]!
-  completedTasks(userId: String!): [Completed!]!
-  notCompletedTasks(userId: String!): [Task!]!
+  taskCategories: [TaskCategory!]!
+  completedTasks(studentId: String!): [Task!]!
+  notCompletedTasks(studentId: String!): [Task!]!
   tasksByLevel(level: Int!): [Task!]!
+  assignmentsByStudent(studentId: String!): [Assignment!]!
+  studentsByClass(classId: String!): [Student!]!
+  student: Student!
+  class: Class!
 }
 
 type Mutation {
@@ -66,6 +130,14 @@ type Mutation {
   deleteUser(username: String!): User!
   completeTask(userId: String!, taskId: String!, answer:Float!, measureUnitId:String!): Completed!
   createMeasureUnit(name: String, category: MeasureUnitCategory): MeasureUnit!
+  createTaskCategory(name: String!): TaskCategory!
+  createClass(name: String!, level: Int): Class!
+  createAssignment(classId: String!, taskId: String!, dueDate:Date): Assignment!
+  createStudent(studentId: String!, classId: String!): Student!
+  updateStudent(studentId: String!, classId: String!, studyPoints: Int!): Student!
+  #assignUserToClass(email: String!, classId: String!): Class!
+  #createAssignment(classId: String!, taskId: String!, dueDate:Date): Assignment!
+
 }
 
 input CreateTaskInput {
@@ -78,6 +150,7 @@ input CreateTaskInput {
   correctAnswer: Float
   # proplem area here
   measureUnit: MeasureUnitInput!
+  category: String!
 }
 
 input UpdateTaskInput {

@@ -10,22 +10,58 @@ interface ITask {
     studyPoints: number;
     correctAnswer: number;
     measureUnit: IMeasureUnit;
+    category: ITaskCategory;
 }
 
 enum MeasureUnitCategory {
-    DISTANCE,
-    AREA,
-    VOLUME,
-    TIME,
-    TEMPERATURE,
-    WEIGHT,
-    ANGLE
+    AFSTAND,
+    AREAL,
+    RUMFANG,
+    TID,
+    TEMPERATUR,
+    VÆGT,
+    VINKEL_GRAD,
+    HASTIGHED,
+}
+
+enum TaskCategoryType {
+    TRIGONOMETRI,
+    GEOMETRI,
+    MÆNGDELÆRE,
+    BRØKER,
+    PROCENTER,
+    LIGNINGER,
+    FUNKTIONER,
+    STATISTIK,
+    ALGEBRA,
+    TALTEORI,
+    LOGARITMER,
+    DIFFERENTIALLIGNINGER,
+    INTEGRALER,
+    VEKTORER,
+    MATRICER,
+    KOMBINATORIK,
+    SANDSYNLIGHEDSREGNING,
+    STOKASTIK,
+    ANALYSE,
+    GEOMETRI_3D,
+    SPEJLINGER,
+    AREAL,
+    RUMFANG,
+    OVERFLADEAREAL,
+    VALUTA,
+    DIVISION_MULTIPLIKATION,
 }
 
 interface IMeasureUnit {
     id: string;
     name: string;
     category: MeasureUnitCategory;
+}
+
+interface ITaskCategory {
+    id: string;
+    name: string;
 }
 
 interface IUser {
@@ -77,5 +113,6 @@ export {
     IMeasureUnitDoc,
     IUserDoc,
     ICompletedDoc,
-    MeasureUnitCategory
+    MeasureUnitCategory,
+    TaskCategoryType
 };

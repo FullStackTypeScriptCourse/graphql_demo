@@ -1,4 +1,5 @@
-import {Task, User, MeasureUnit, Completed} from "../models/allmodels";
+import {ObjectId} from 'mongodb';
+import {Task, User, MeasureUnit, Completed, TaskCategory} from "../models/allmodels";
 import { authenticate } from "../utils";
 
 export default {
@@ -8,10 +9,17 @@ export default {
     ,users: authenticate('admin', async (_parent:never, { email }:{email:String}) => await User.find())
     ,user: async(_parent:never, { email }:{email:String}) =>  await User.findOne({ email })
     ,measureUnits: async () => MeasureUnit.find().sort({ category: 1, name: 1 }) // Sort by category and then by name ascending (-1 is descending)
-    ,completedTasks: async (_parent:never, { userId }:{userId:String}) => Completed.find({ userId })
+    ,taskCategories: async () => TaskCategory.find().sort({ name: 1 }) // Sort by name ascending (-1 is descending)
+    ,completedTasks: async (_parent:never, { userId }:{userId:String}) => {
+        const completed = await Completed.find({ user: new ObjectId(userId as string) });
+        console.log(completed);
+        const completedTaskIds = completed.map((task) => task.id);
+        console.log(completedTaskIds);
+        return Task.find({ id: { $in: completedTaskIds } });
+    }
     ,notCompletedTasks: async (_parent:never, { userId }:{userId:String}) => {
-        const completedTasks = await Completed.find({ userId });
-        const completedTaskIds = completedTasks.map((task) => task.id);
+        const completeds = await Completed.find({ userId, approved: true });
+        const completedTaskIds = completeds.map((task) => task.id);
         return Task.find({ _id: { $nin: completedTaskIds } });
     }
 }
